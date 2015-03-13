@@ -167,7 +167,6 @@ angular.module('things', ['ngRoute', 'angularFileUpload', 'ui.bootstrap'])
     $scope.thing = ThingManager.thing;
 
     $scope.returnPath = "/";
-
     if( $routeParams.parents !== undefined ) {
       var parents = $routeParams.parents;
       var parentIds = parents.split(",");
@@ -185,10 +184,10 @@ angular.module('things', ['ngRoute', 'angularFileUpload', 'ui.bootstrap'])
       return '#edit/' + thingId + '?parents=' + $scope.thing.id;
     }
 
-    PrototypeManager.initialise( _data.prototypes );
+    PrototypeManager.initialise( _data.prototypes, $scope.thing.prototype );
     $scope.prototypes = PrototypeManager.prototypes;
+    $scope.prototype = PrototypeManager.prototype;
     ThingManager.setupSidebar( $scope.prototypes );
-
   });
 
   $scope.values = {

@@ -80,7 +80,6 @@ function ThingManager($location, $route, $upload, PrototypeManager, MCData) {
   }
 
   this.save = function( thing, callback, returnPath ) {
-
     if( thing === undefined || thing === null) {
       if( that.thing === undefined || that.thing === null) {
         return false;

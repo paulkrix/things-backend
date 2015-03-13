@@ -1,7 +1,9 @@
 <?php
 
+/*
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+*/
 
 class DataManager {
 
@@ -37,6 +39,9 @@ class DataManager {
     exit();
   }
 
+  public function getReponse() {
+    return $this->reponse;
+  }
 
   public function createTables() {
 
@@ -131,6 +136,52 @@ class DataManager {
 /***
  * TODO: Add fields
  **/
+
+  public function getThing($id) {
+
+    $statement = $this->mysqli->prepare("SELECT name, options FROM thing WHERE id = ?");
+    $statement->bind_param("i", $id);
+
+    if(!$statement->execute()) {
+      $this->response['status'] = 'error';
+      $this->response['error'] = "MySQL query error: (" . $statement->errno . ") " . $statement->error;
+      $this->respond();
+    }
+    $statement->bind_result($name, $options);
+    $statement->store_result();
+    $statement->fetch();
+
+    $thing = array();
+    $thing['name'] = $name;
+    $thing['options'] = json_decode( $options );
+    $thing['fields'] = array();
+
+    $fieldStatement = $this->mysqli->prepare("SELECT id, name, type, value, array, options FROM field WHERE field.thing = ?");
+    $fieldStatement->bind_param("i", $id);
+  
+    if(!$fieldStatement->execute()) {
+      $this->response['status'] = 'error';
+      $this->response['error'] = "MySQL query error: (" . $fieldStatement->errno . ") " . $fieldStatement->error;
+      $this->respond();
+    }
+    $fieldStatement->bind_result($fid, $fname, $type, $value, $array, $options);
+
+    while($fieldStatement->fetch()) {
+      $field = array();
+      $field['id'] = $fid;
+      $field['name'] = $fname;
+      $field['thing'] = $id;
+      $field['type'] = $type;
+      $field['value'] = json_decode( $value );
+      $field['array'] = ( $array == 0 ? false : true );
+      $field['options'] = json_decode( $options );
+      $thing['fields'][] = $field;
+    }
+
+    $this->response['thing'] = $thing;
+    return $thing;
+  }
+
 
   public function getThings() {
 

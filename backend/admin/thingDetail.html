@@ -80,7 +80,7 @@
                                   </div>
                                   <div ng-switch-when="IMAGE">
                                     <div class="well">
-                                      <img src="{{item}}" style="max-height:200px;" />
+                                      <img src="../{item}}" style="max-height:200px;" />
                                       <p class="help-block">Upload new image</p> 
                                       <input type="file" ng-file-select="onFileSelect($files, field)" name="value" />
                                     </div>
@@ -143,7 +143,7 @@
                             </div>
                             <div ng-switch-when="IMAGE">
                               <div class="well">
-                                <img ng-if="field.value !== null" src="{{field.value}}" style="max-height:200px;" />
+                                <img ng-if="field.value !== null" src="../{{field.value}}" style="max-height:200px;" />
                                 <p class="help-block">Upload new image</p> 
                                 <input type="file" ng-file-select="onFileSelect($files, field)" name="value" />
                               </div>
